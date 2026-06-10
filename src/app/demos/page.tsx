@@ -81,6 +81,15 @@ export default function DemosPage() {
           </aside>
         </section>
 
+        {/* Banner "in construction" */}
+        <div className="animate-fade-in mb-8 flex items-center gap-3 rounded-2xl border border-vang/40 bg-vang/[0.08] px-5 py-3.5 backdrop-blur">
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-vang opacity-60" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-vang" />
+          </span>
+          <p className="text-sm font-medium leading-snug text-giay/90">{t.demosConstruction}</p>
+        </div>
+
         {/* Gallery */}
         <section className="grid gap-5 md:grid-cols-2">
           {DEMOS.map((item, i) => (

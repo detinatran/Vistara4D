@@ -196,6 +196,7 @@ export interface UIStrings {
   demosNoteTitle: string;
   demosNote: string;
   openSource: string;
+  demosConstruction: string;
   scanQR: string;
   subscribe: string;
   share: string;
@@ -251,6 +252,8 @@ export const UI: Record<Lang, UIStrings> = {
     demosNote:
       "Đây là demo nghiên cứu công khai từ Google DeepMind và các nhóm 4DGS, dùng để chứng minh hướng công nghệ khả thi. Vistara4D sẽ pilot dữ liệu thật tại di tích sau — không trình bày đây là sản phẩm đã tự scan của nhóm.",
     openSource: "Mở nguồn",
+    demosConstruction:
+      "🚧 Đang phát triển — Vistara4D đang hoàn thiện để đạt chất lượng 4D như các demo nghiên cứu dưới đây.",
     scanQR: "Quét QR tại di tích",
     subscribe: "Nhận thông tin",
     share: "Chia sẻ",
@@ -304,6 +307,8 @@ export const UI: Record<Lang, UIStrings> = {
     demosNote:
       "These are public research demos from Google DeepMind and 4DGS teams, used to prove the technology direction is feasible. Vistara4D will pilot real data on-site later — do not present these as the team's own scans.",
     openSource: "Open source",
+    demosConstruction:
+      "🚧 We're in construction — Vistara4D is being built to reach the 4D quality shown in the research demos below.",
     scanQR: "Scan QR on-site",
     subscribe: "Get updates",
     share: "Share",
