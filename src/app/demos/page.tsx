@@ -60,7 +60,6 @@ export default function DemosPage() {
           </div>
 
           <aside className="glass animate-fade-in delay-2 flex flex-col gap-3 rounded-3xl p-5">
-            <h2 className="font-serif text-lg font-semibold text-vang">{t.demosNoteTitle}</h2>
             <div className="rounded-xl bg-vang/90 p-4 text-[13px] font-medium leading-relaxed text-[#5a3d00]">
               {t.demosNote}
             </div>
