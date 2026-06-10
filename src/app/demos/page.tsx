@@ -49,7 +49,7 @@ export default function DemosPage() {
               }}
             />
             <p className="relative mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-vang">
-              Google D4RT · MegaSAM · 4D Gaussian Splatting
+              Shape of Motion · Google D4RT · MegaSAM
             </p>
             <h1 className="relative mb-3 font-serif text-4xl font-bold leading-[1.05] text-gradient-heritage sm:text-5xl">
               {t.demosTitle}

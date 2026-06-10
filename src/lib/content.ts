@@ -247,7 +247,7 @@ export const UI: Record<Lang, UIStrings> = {
     demoOptions: "Demo Options",
     demosTitle: "Scene-based 4D demos",
     demosSub:
-      "10 hình động thiên về cảnh quan, không gian và camera di chuyển — minh họa hướng công nghệ 4D Gaussian khả thi cho khu du lịch, bảo tàng và di tích.",
+      "Các hình động thiên về cảnh quan, chuyển động và camera di chuyển — minh họa hướng công nghệ 4D khả thi cho khu du lịch, bảo tàng và di tích.",
     demosNoteTitle: "Cách dùng khi pitch",
     demosNote:
       "Đây là demo nghiên cứu công khai từ Google DeepMind và các nhóm 4DGS, dùng để chứng minh hướng công nghệ khả thi. Vistara4D sẽ pilot dữ liệu thật tại di tích sau — không trình bày đây là sản phẩm đã tự scan của nhóm.",
@@ -302,7 +302,7 @@ export const UI: Record<Lang, UIStrings> = {
     demoOptions: "Demo Options",
     demosTitle: "Scene-based 4D demos",
     demosSub:
-      "10 short clips focused on landscape, space and moving cameras — showing the feasible 4D Gaussian direction for tourism sites, museums and monuments.",
+      "Short clips focused on landscape, motion and moving cameras — showing the feasible 4D direction for tourism sites, museums and monuments.",
     demosNoteTitle: "How to use when pitching",
     demosNote:
       "These are public research demos from Google DeepMind and 4DGS teams, used to prove the technology direction is feasible. Vistara4D will pilot real data on-site later — do not present these as the team's own scans.",
