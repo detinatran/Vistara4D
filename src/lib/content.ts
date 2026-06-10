@@ -250,7 +250,7 @@ export const UI: Record<Lang, UIStrings> = {
       "Các hình động thiên về cảnh quan, chuyển động và camera di chuyển — minh họa hướng công nghệ 4D khả thi cho khu du lịch, bảo tàng và di tích.",
     demosNoteTitle: "Cách dùng khi pitch",
     demosNote:
-      "Đây là demo nghiên cứu công khai từ Google DeepMind và các nhóm 4DGS, dùng để chứng minh hướng công nghệ khả thi. Vistara4D sẽ pilot dữ liệu thật tại di tích sau — không trình bày đây là sản phẩm đã tự scan của nhóm.",
+      "Chúng tôi đang xây dựng (in construction). Các video dưới đây là kết quả nghiên cứu công khai của Google DeepMind, Shape of Motion và những nhóm khác — đặt ở đây để cho thấy công nghệ 4D này là có thật và làm được. Vistara4D sẽ tự quay, tự dựng dữ liệu ngay tại di tích trong giai đoạn tới.",
     openSource: "Mở nguồn",
     demosConstruction:
       "🚧 Đang phát triển — Vistara4D đang hoàn thiện để đạt chất lượng 4D như các demo nghiên cứu dưới đây.",
@@ -305,7 +305,7 @@ export const UI: Record<Lang, UIStrings> = {
       "Short clips focused on landscape, motion and moving cameras — showing the feasible 4D direction for tourism sites, museums and monuments.",
     demosNoteTitle: "How to use when pitching",
     demosNote:
-      "These are public research demos from Google DeepMind and 4DGS teams, used to prove the technology direction is feasible. Vistara4D will pilot real data on-site later — do not present these as the team's own scans.",
+      "We're in construction. The clips below are public research results from Google DeepMind, Shape of Motion and others — shown here to prove this 4D tech is real and doable. Vistara4D will shoot and reconstruct its own data on-site in the next phase.",
     openSource: "Open source",
     demosConstruction:
       "🚧 We're in construction — Vistara4D is being built to reach the 4D quality shown in the research demos below.",
