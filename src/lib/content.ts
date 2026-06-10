@@ -221,6 +221,14 @@ export interface UIStrings {
   qrDesc: string;
   close: string;
   backHome: string;
+  // onboarding / intro
+  introTitle: string;
+  introSub: string;
+  introStart: string;
+  tipDrag: string;
+  tipSlider: string;
+  tipModes: string;
+  gotIt: string;
 }
 
 export const UI: Record<Lang, UIStrings> = {
@@ -261,6 +269,13 @@ export const UI: Record<Lang, UIStrings> = {
     qrDesc: "Quét mã này tại Văn Miếu để mở đúng Time Capsule khu vực bạn đang đứng.",
     close: "Đóng",
     backHome: "Trang chủ",
+    introTitle: "Văn Miếu in Motion",
+    introSub: "Kéo dòng thời gian để thấy di tích vận hành như một không gian sống.",
+    introStart: "Bắt đầu trải nghiệm",
+    tipDrag: "Kéo để xoay, cuộn để phóng to không gian 3D.",
+    tipSlider: "Kéo thanh thời gian để chuyển 4 lớp: sáng sớm → khoa cử xưa.",
+    tipModes: "Bật Then & Now để so sánh, Lễ hội để thêm không khí.",
+    gotIt: "Đã hiểu",
   },
   en: {
     brandTagline: "Living with Vietnam's heritage",
@@ -299,5 +314,12 @@ export const UI: Record<Lang, UIStrings> = {
     qrDesc: "Scan this on-site at the Temple of Literature to open the Time Capsule for where you stand.",
     close: "Close",
     backHome: "Home",
+    introTitle: "Văn Miếu in Motion",
+    introSub: "Drag the timeline to see the monument behave as a living space.",
+    introStart: "Start the experience",
+    tipDrag: "Drag to rotate, scroll to zoom the 3D space.",
+    tipSlider: "Drag the time slider through 4 layers: dawn → imperial era.",
+    tipModes: "Toggle Then & Now to compare, Festival for atmosphere.",
+    gotIt: "Got it",
   },
 };

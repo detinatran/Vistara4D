@@ -1,5 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+
+// Heading: serif sang trọng, cổ điển — gợi không khí di sản
+const serif = Playfair_Display({
+  subsets: ["latin", "vietnamese"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+// Body: sans hỗ trợ tiếng Việt tốt, hiện đại, dễ đọc trên mobile
+const sans = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vistara4d.demo"),
@@ -24,8 +41,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi">
-      <body>{children}</body>
+    <html lang="vi" className={`${serif.variable} ${sans.variable}`}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }

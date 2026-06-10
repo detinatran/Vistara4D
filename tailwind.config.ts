@@ -20,21 +20,22 @@ const config: Config = {
         reu: "#5A6B4D",      // rêu cổ kính
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Georgia", "serif"],
+        serif: ["var(--font-serif)", '"Times New Roman"', "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
+      borderRadius: {
+        "2xl": "1rem",
+        "3xl": "1.5rem",
+      },
+      // fade-in / fade-in-scale / float-up định nghĩa trong globals.css.
+      // Giữ slow-pan ở đây cho nền hero.
       keyframes: {
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
         "slow-pan": {
           "0%": { transform: "scale(1) translate(0,0)" },
           "100%": { transform: "scale(1.08) translate(-2%,-1%)" },
         },
       },
       animation: {
-        "fade-in": "fade-in 0.6s ease-out both",
         "slow-pan": "slow-pan 20s ease-in-out infinite alternate",
       },
     },

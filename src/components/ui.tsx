@@ -41,16 +41,20 @@ function Modal({
   if (!open) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-fade-in"
+      className="animate-fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm sm:items-center"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-vang/30 bg-muc paper-grain p-5 shadow-2xl"
+        className="animate-fade-in-scale glass-strong paper-grain w-full max-w-md rounded-3xl p-5"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-serif text-lg text-vang">{title}</h3>
-          <button onClick={onClose} className="text-giay/60 hover:text-giay text-xl leading-none">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-serif text-xl font-semibold text-vang">{title}</h3>
+          <button
+            onClick={onClose}
+            aria-label="close"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-giay/20 text-lg leading-none text-giay/60 transition hover:bg-giay/10 hover:text-giay"
+          >
             ×
           </button>
         </div>

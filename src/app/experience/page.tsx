@@ -11,8 +11,12 @@ import { MODEL_CREDITS } from "@/lib/credits";
 const Viewer4D = dynamic(() => import("@/components/Viewer4D"), {
   ssr: false,
   loading: () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-muc text-giay/50">
-      <div className="animate-pulse text-sm">Đang dựng không gian 4D…</div>
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#1f2d4d] via-[#5a3a2a] to-[#0e0b08]">
+      <img src="/logo.png" alt="" className="h-16 w-16 animate-pulse object-contain opacity-80" />
+      <div className="h-1 w-32 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full w-1/2 shimmer rounded-full" />
+      </div>
+      <div className="text-xs tracking-wide text-giay/50">Đang dựng không gian 4D…</div>
     </div>
   ),
 });
@@ -29,6 +33,7 @@ export default function ExperiencePage() {
   const [storyOpen, setStoryOpen] = useState(true);
   const [qr, setQr] = useState(false);
   const [share, setShare] = useState(false);
+  const [intro, setIntro] = useState(true); // overlay onboarding khi mới vào
 
   const t = UI[lang];
 
@@ -68,15 +73,17 @@ export default function ExperiencePage() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55)_100%)]" />
 
       {/* ---------- Top bar ---------- */}
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between p-4">
+      <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between p-3 sm:p-4">
         <Link
           href="/"
-          className="pointer-events-auto flex items-center gap-2 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur"
+          className="glass pointer-events-auto flex items-center gap-2 rounded-full px-3 py-1.5 transition hover:ring-heritage"
         >
           <img src="/logo.png" alt="" className="h-6 w-6 object-contain" />
-          <span className="text-xs font-semibold tracking-wide">VISTARA4D</span>
+          <span className="font-serif text-xs font-semibold tracking-wide">
+            Vistara<span className="text-vang">4D</span>
+          </span>
         </Link>
-        <div className="pointer-events-auto flex items-center gap-2">
+        <div className="pointer-events-auto">
           <LangToggle lang={lang} onChange={setLang} />
         </div>
       </header>
@@ -104,31 +111,37 @@ export default function ExperiencePage() {
 
       {/* ---------- Story Layer panel (trái) ---------- */}
       <aside
-        className={`absolute left-0 top-1/2 z-20 max-w-[78vw] -translate-y-1/2 transition-transform duration-300 sm:max-w-sm ${
-          storyOpen ? "translate-x-0" : "-translate-x-[calc(100%-2.5rem)]"
+        className={`absolute left-0 top-1/2 z-20 w-[82vw] max-w-sm -translate-y-1/2 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          storyOpen ? "translate-x-0" : "-translate-x-[calc(100%-2.25rem)]"
         }`}
       >
-        <div className="m-3 rounded-2xl border border-giay/15 bg-black/45 p-4 backdrop-blur-md">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-vang">
+        <div className="glass m-3 max-h-[72vh] overflow-y-auto rounded-3xl p-4 hide-scrollbar">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-vang">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-vang" />
               {layer.clock} · {t.story}
             </span>
             <button
               onClick={() => setStoryOpen((s) => !s)}
-              className="text-giay/50 hover:text-giay text-sm"
-              aria-label="toggle"
+              className="flex h-6 w-6 items-center justify-center rounded-full border border-giay/20 text-sm text-giay/60 transition hover:bg-giay/10 hover:text-giay"
+              aria-label="toggle story"
             >
               {storyOpen ? "‹" : "›"}
             </button>
           </div>
-          <h2 className="mb-1 font-serif text-xl text-giay">{ld.name}</h2>
-          <p className="mb-3 text-xs font-medium text-son-light">{ld.tagline}</p>
+          <h2 className="mb-1 font-serif text-2xl font-semibold text-giay">{ld.name}</h2>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-son-light">
+            {ld.tagline}
+          </p>
           <p className="mb-3 text-sm leading-relaxed text-giay/85">{ld.story}</p>
 
           {/* Captions */}
           <div className="mb-3 flex flex-wrap gap-1.5">
             {ld.captions.map((c, i) => (
-              <span key={i} className="rounded-full bg-giay/10 px-2 py-0.5 text-[10px] text-giay/70">
+              <span
+                key={i}
+                className="rounded-full border border-giay/10 bg-giay/5 px-2.5 py-1 text-[10px] text-giay/75"
+              >
                 {c}
               </span>
             ))}
@@ -161,10 +174,13 @@ export default function ExperiencePage() {
         </div>
 
         {/* Time Slider */}
-        <div className="mx-auto max-w-2xl rounded-2xl border border-giay/15 bg-black/45 p-4 backdrop-blur-md">
-          <div className="mb-2 flex items-center justify-between text-[11px] text-giay/60">
-            <span className="uppercase tracking-widest text-vang">{t.timeline}</span>
-            <span>{ld.name}</span>
+        <div className="glass mx-auto max-w-2xl rounded-3xl p-4">
+          <div className="mb-2.5 flex items-center justify-between text-[11px]">
+            <span className="flex items-center gap-1.5 uppercase tracking-widest text-vang">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-vang" />
+              {t.timeline}
+            </span>
+            <span className="font-serif text-sm text-giay/90">{ld.name}</span>
           </div>
           <input
             type="range"
@@ -174,21 +190,27 @@ export default function ExperiencePage() {
             step={0.01}
             value={pos}
             onChange={(e) => setPos(parseFloat(e.target.value))}
+            aria-label={t.timeline}
           />
           {/* Nhãn các mốc — bấm để nhảy */}
-          <div className="mt-2 flex justify-between">
-            {LAYERS.map((l, i) => (
-              <button
-                key={l.id}
-                onClick={() => setPos(i)}
-                className={`flex-1 px-1 text-center font-serif text-[11px] leading-tight transition ${
-                  Math.round(pos) === i ? "font-bold text-giay" : "text-giay/45 hover:text-giay/70"
-                }`}
-              >
-                <span className="block">{l.clock}</span>
-                <span className="block">{l[lang].name}</span>
-              </button>
-            ))}
+          <div className="mt-2.5 flex gap-1">
+            {LAYERS.map((l, i) => {
+              const isActive = Math.round(pos) === i;
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => setPos(i)}
+                  className={`flex-1 rounded-lg px-1 py-1 text-center font-serif text-[11px] leading-tight transition ${
+                    isActive
+                      ? "bg-son/20 font-semibold text-giay ring-1 ring-inset ring-son/40"
+                      : "text-giay/45 hover:bg-white/5 hover:text-giay/75"
+                  }`}
+                >
+                  <span className="block text-[9px] opacity-70">{l.clock}</span>
+                  <span className="block">{l[lang].name}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -211,7 +233,59 @@ export default function ExperiencePage() {
 
       <QRModal open={qr} onClose={() => setQr(false)} t={t} />
       <ShareModal open={share} onClose={() => setShare(false)} t={t} />
+
+      {/* ---------- Intro / onboarding overlay ---------- */}
+      {intro && <IntroOverlay t={t} onStart={() => setIntro(false)} />}
     </main>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Intro overlay: chào mừng + 3 tip thao tác. Hiện 1 lần khi vào trang.
+function IntroOverlay({ t, onStart }: { t: UIStrings; onStart: () => void }) {
+  const tips: [string, string][] = [
+    ["🖐️", t.tipDrag],
+    ["⏱️", t.tipSlider],
+    ["🎚️", t.tipModes],
+  ];
+  return (
+    <div className="animate-fade-in fixed inset-0 z-40 flex items-center justify-center bg-black/55 p-5 backdrop-blur-md">
+      <div className="animate-fade-in-scale glass-strong w-full max-w-sm rounded-3xl p-6 text-center">
+        <img
+          src="/logo.png"
+          alt=""
+          className="mx-auto mb-4 h-20 w-20 object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.5)]"
+        />
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-vang">
+          Vistara4D
+        </p>
+        <h2 className="mb-2 font-serif text-2xl font-semibold text-gradient-heritage">
+          {t.introTitle}
+        </h2>
+        <p className="mb-5 text-sm leading-relaxed text-giay/80">{t.introSub}</p>
+
+        <div className="mb-6 space-y-2.5 text-left">
+          {tips.map(([icon, text], i) => (
+            <div
+              key={i}
+              className="animate-float-up flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3"
+              style={{ animationDelay: `${0.1 + i * 0.08}s` }}
+            >
+              <span className="text-lg leading-none">{icon}</span>
+              <span className="text-xs leading-relaxed text-giay/85">{text}</span>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={onStart}
+          className="group relative w-full overflow-hidden rounded-2xl bg-son py-3.5 text-base font-bold text-giay shadow-lg shadow-son/40 transition hover:bg-son-light active:scale-[0.98]"
+        >
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+          <span className="relative">▶ {t.introStart}</span>
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -233,15 +307,15 @@ function ControlBtn({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold backdrop-blur transition active:scale-95 ${
+      className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold backdrop-blur-md transition-all active:scale-95 ${
         disabled
           ? "cursor-not-allowed border-giay/10 text-giay/25"
           : active
-          ? "border-son bg-son text-giay"
-          : "border-giay/25 bg-black/30 text-giay/85 hover:bg-black/50"
+          ? "border-son bg-son text-giay shadow-lg shadow-son/40 ring-1 ring-inset ring-white/15"
+          : "border-giay/20 bg-black/35 text-giay/85 hover:-translate-y-0.5 hover:border-vang/40 hover:bg-black/55"
       }`}
     >
-      <span>{icon}</span>
+      <span className="text-sm leading-none">{icon}</span>
       <span className="hidden sm:inline">{label}</span>
     </button>
   );

@@ -35,6 +35,105 @@ function lerpColor(a: string, b: string, t: number) {
 }
 
 // ---------------------------------------------------------------------------
+// Hàng ngói ống (âm dương) chạy dọc theo diềm mái — các trụ bán nguyệt nhỏ.
+// ---------------------------------------------------------------------------
+function TileRow({
+  length,
+  radius = 0.05,
+  gap = 0.13,
+  color,
+  y,
+  z,
+}: {
+  length: number;
+  radius?: number;
+  gap?: number;
+  color: string;
+  y: number;
+  z: number;
+}) {
+  const count = Math.max(2, Math.floor(length / gap));
+  const items = Array.from({ length: count }, (_, i) => -length / 2 + i * gap + gap / 2);
+  return (
+    <group position={[0, y, z]}>
+      {items.map((x, i) => (
+        <mesh key={i} position={[x, 0, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+          <cylinderGeometry args={[radius, radius, 0.18, 8, 1, false, 0, Math.PI]} />
+          <meshStandardMaterial color={color} roughness={0.7} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Đầu đao / kìm nóc cách điệu (đuôi rồng cong vút ở góc mái).
+// ---------------------------------------------------------------------------
+function RidgeBeast({ color }: { color: string }) {
+  const curve = useMemo(() => {
+    const pts = [
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0.06, 0.16, 0),
+      new THREE.Vector3(0.02, 0.3, 0),
+      new THREE.Vector3(-0.1, 0.36, 0),
+    ];
+    return new THREE.CatmullRomCurve3(pts);
+  }, []);
+  const geom = useMemo(() => new THREE.TubeGeometry(curve, 16, 0.035, 6, false), [curve]);
+  return (
+    <group>
+      <mesh geometry={geom} castShadow>
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+      {/* các vây nhỏ trên sống */}
+      {[0.12, 0.2, 0.28].map((t, i) => (
+        <mesh key={i} position={[0.04 - i * 0.02, t, 0]} rotation={[0, 0, 0.5]} castShadow>
+          <coneGeometry args={[0.025, 0.07, 4]} />
+          <meshStandardMaterial color={color} roughness={0.6} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Một mảng chữ Hán cách điệu trên bia — lưới ô vuông nhỏ chìm (gợi cột chữ).
+// ---------------------------------------------------------------------------
+function CarvedText({
+  w,
+  h,
+  cols,
+  rows,
+  color,
+  z,
+}: {
+  w: number;
+  h: number;
+  cols: number;
+  rows: number;
+  color: string;
+  z: number;
+}) {
+  const cells: [number, number][] = [];
+  const cw = w / cols;
+  const ch = h / rows;
+  for (let c = 0; c < cols; c++)
+    for (let r = 0; r < rows; r++) {
+      cells.push([-w / 2 + cw * (c + 0.5), -h / 2 + ch * (r + 0.5)]);
+    }
+  return (
+    <group position={[0, 0, z]}>
+      {cells.map(([x, y], i) => (
+        <mesh key={i} position={[x, y, 0]}>
+          <boxGeometry args={[cw * 0.62, ch * 0.62, 0.006]} />
+          <meshStandardMaterial color={color} roughness={0.95} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Mái đao cong kiểu Việt — dựng bằng ExtrudeGeometry từ một tiết diện cong
 // (đầu đao hếch lên). Bốn cạnh ghép thành mái 4 hướng có đầu đao vút.
 // ---------------------------------------------------------------------------
@@ -88,18 +187,35 @@ function FlaredRoof({
 
   // 4 tấm mái xoay quanh trục Y, mỗi tấm hướng dốc ra một phía
   const dirs = [0, Math.PI / 2, Math.PI, -Math.PI / 2];
+  const eaveOut = half + flare;       // vị trí diềm mái (ngói ống)
+  const eaveY = flare * 0.55 + 0.06;  // độ cao đầu đao
   return (
     <group position={[0, y, 0]}>
       {dirs.map((rot, i) => (
-        <mesh key={i} geometry={geom} rotation={[0, rot, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={color} flatShading roughness={0.85} side={THREE.DoubleSide} />
-        </mesh>
+        <group key={i} rotation={[0, rot, 0]}>
+          {/* tấm mái */}
+          <mesh geometry={geom} castShadow receiveShadow>
+            <meshStandardMaterial color={color} flatShading roughness={0.85} side={THREE.DoubleSide} />
+          </mesh>
+          {/* hàng ngói ống dọc diềm mái */}
+          <TileRow length={side * 1.9} color="#7a2a1e" y={eaveY} z={eaveOut} />
+          {/* đầu đao kìm nóc ở 2 góc của cạnh này */}
+          <group position={[side * 0.95, eaveY, eaveOut - 0.05]} rotation={[0, -0.4, 0]}>
+            <RidgeBeast color="#caa24e" />
+          </group>
+          <group position={[-side * 0.95, eaveY, eaveOut - 0.05]} rotation={[0, 0.4, 0]}>
+            <RidgeBeast color="#caa24e" />
+          </group>
+        </group>
       ))}
       {/* bờ nóc */}
       <mesh position={[0, rise + 0.06, 0]} castShadow>
         <boxGeometry args={[side * 0.7, 0.14, side * 0.7]} />
         <meshStandardMaterial color="#5e1f14" roughness={0.8} />
       </mesh>
+      {/* ngói bờ nóc */}
+      <TileRow length={side * 0.7} color="#6e2418" y={rise + 0.14} z={side * 0.35} />
+      <TileRow length={side * 0.7} color="#6e2418" y={rise + 0.14} z={-side * 0.35} />
     </group>
   );
 }
@@ -282,11 +398,53 @@ function KhueVanCac({ roof, wood }: { roof: THREE.Color; wood: THREE.Color }) {
         <StarWindow color={gold} />
       </group>
 
+      {/* khung gỗ vuông ôm quanh mỗi cửa sổ tròn (4 mặt) */}
+      {[
+        [0, 0.83, 0],
+        [0, -0.83, Math.PI],
+        [0.83, 0, Math.PI / 2],
+        [-0.83, 0, -Math.PI / 2],
+      ].map(([x, z, rot], i) => (
+        <group key={`fr${i}`} position={[x, 2.66, z]} rotation={[0, rot, 0]}>
+          {/* viền khung */}
+          {[
+            [0, 0.46, 1.0, 0.07],
+            [0, -0.46, 1.0, 0.07],
+            [0.46, 0, 0.07, 0.99],
+            [-0.46, 0, 0.07, 0.99],
+          ].map(([fx, fy, fw, fh], j) => (
+            <mesh key={j} position={[fx, fy, 0.005]} castShadow>
+              <boxGeometry args={[fw, fh, 0.05]} />
+              <meshStandardMaterial color="#7a1d14" roughness={0.6} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+
+      {/* dải hoa văn chân thân lầu (triện) */}
+      <TileRow length={1.5} radius={0.04} gap={0.16} color="#caa24e" y={2.06} z={0.81} />
+      <TileRow length={1.5} radius={0.04} gap={0.16} color="#caa24e" y={2.06} z={-0.81} />
+
       {/* đại tự (hoành phi) phía trước, dưới cửa sổ */}
       <mesh position={[0, 3.34, 0.82]} castShadow>
-        <boxGeometry args={[0.9, 0.18, 0.04]} />
+        <boxGeometry args={[0.95, 0.2, 0.05]} />
         <meshStandardMaterial color={gold} metalness={0.3} roughness={0.5} />
       </mesh>
+      {/* 3 chữ trên hoành phi (ô chìm) */}
+      <group position={[0, 3.34, 0.845]}>
+        <CarvedText w={0.78} h={0.13} cols={3} rows={1} color="#7a4a16" z={0} />
+      </group>
+
+      {/* đôi câu đối dọc 2 cột trước */}
+      {[0.83, -0.83].map((x, i) => (
+        <group key={`cd${i}`} position={[x, 2.9, 0.84]}>
+          <mesh castShadow>
+            <boxGeometry args={[0.14, 1.0, 0.04]} />
+            <meshStandardMaterial color="#7a1d14" roughness={0.6} />
+          </mesh>
+          <CarvedText w={0.08} h={0.82} cols={1} rows={6} color={gold} z={0.025} />
+        </group>
+      ))}
 
       {/* ===== Mái tầng 1 (lớn, thấp) ===== */}
       <Brackets half={0.92} y={3.28} color="#6e2418" />
@@ -315,69 +473,132 @@ function KhueVanCac({ roof, wood }: { roof: THREE.Color; wood: THREE.Color }) {
   );
 }
 
-/** Bia Tiến sĩ cách điệu chi tiết: rùa đội bia (đầu/mai/chân) + trán bia bo cong. */
+/** Bia Tiến sĩ chi tiết tối đa: rùa (mai chia ô, mắt, móng) + thân khắc chữ + trán hoa văn. */
 function SteleFallback({ color }: { color: string }) {
   const shell = "#6f6450";
+  const shellDark = "#5b5142";
+  const stone = color;
+  // toạ độ các ô vảy trên mai rùa
+  const scutes: [number, number][] = [
+    [0, 0], [0.13, 0], [-0.13, 0], [0, 0.14], [0, -0.14],
+    [0.13, 0.13], [-0.13, 0.13], [0.13, -0.13], [-0.13, -0.13],
+  ];
   return (
     <group>
+      {/* ===== Bệ đá dưới cùng ===== */}
+      <mesh position={[0, 0.03, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.78, 0.06, 0.62]} />
+        <meshStandardMaterial color="#a89878" roughness={0.95} />
+      </mesh>
+
       {/* ===== Rùa ===== */}
       {/* mai rùa */}
-      <mesh position={[0, 0.14, 0]} scale={[1.3, 0.55, 1]} castShadow>
-        <sphereGeometry args={[0.3, 16, 12]} />
+      <mesh position={[0, 0.16, 0]} scale={[1.35, 0.6, 1.05]} castShadow>
+        <sphereGeometry args={[0.3, 20, 14]} />
         <meshStandardMaterial color={shell} roughness={0.95} flatShading />
       </mesh>
-      {/* đầu rùa vươn ra trước */}
-      <mesh position={[0, 0.12, 0.38]} castShadow>
-        <sphereGeometry args={[0.08, 10, 8]} />
+      {/* gờ viền mai */}
+      <mesh position={[0, 0.1, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+        <torusGeometry args={[0.38, 0.03, 8, 24]} />
+        <meshStandardMaterial color={shellDark} roughness={0.95} />
+      </mesh>
+      {/* ô vảy trên mai */}
+      {scutes.map(([x, z], i) => (
+        <mesh key={i} position={[x, 0.27, z]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.055, 0.055, 0.01, 6]} />
+          <meshStandardMaterial color={shellDark} roughness={0.95} />
+        </mesh>
+      ))}
+      {/* đầu rùa vươn ra + mắt */}
+      <mesh position={[0, 0.13, 0.4]} castShadow>
+        <sphereGeometry args={[0.09, 12, 10]} />
         <meshStandardMaterial color="#7a6f58" roughness={0.95} />
       </mesh>
-      {/* 4 chân */}
-      {[
-        [-0.28, 0.32],
-        [0.28, 0.32],
-        [-0.28, -0.3],
-        [0.28, -0.3],
-      ].map(([x, z], i) => (
-        <mesh key={i} position={[x, 0.05, z]} castShadow>
-          <boxGeometry args={[0.1, 0.1, 0.14]} />
-          <meshStandardMaterial color="#7a6f58" roughness={0.95} />
+      <mesh position={[0, 0.11, 0.48]} castShadow>
+        <sphereGeometry args={[0.05, 10, 8]} />
+        <meshStandardMaterial color="#867a62" roughness={0.95} />
+      </mesh>
+      {[0.04, -0.04].map((ex, i) => (
+        <mesh key={i} position={[ex, 0.15, 0.5]}>
+          <sphereGeometry args={[0.012, 6, 6]} />
+          <meshStandardMaterial color="#2a2018" roughness={0.5} />
         </mesh>
+      ))}
+      {/* đuôi */}
+      <mesh position={[0, 0.1, -0.42]} rotation={[0.3, 0, 0]} castShadow>
+        <coneGeometry args={[0.04, 0.16, 6]} />
+        <meshStandardMaterial color="#7a6f58" roughness={0.95} />
+      </mesh>
+      {/* 4 chân + móng */}
+      {[
+        [-0.3, 0.34],
+        [0.3, 0.34],
+        [-0.3, -0.32],
+        [0.3, -0.32],
+      ].map(([x, z], i) => (
+        <group key={i} position={[x, 0.06, z]}>
+          <mesh castShadow>
+            <boxGeometry args={[0.13, 0.1, 0.16]} />
+            <meshStandardMaterial color="#7a6f58" roughness={0.95} />
+          </mesh>
+          {/* móng */}
+          {[-0.04, 0, 0.04].map((mx, j) => (
+            <mesh key={j} position={[mx, -0.03, (z > 0 ? 0.09 : -0.09)]}>
+              <coneGeometry args={[0.012, 0.04, 5]} />
+              <meshStandardMaterial color="#5b5142" roughness={0.9} />
+            </mesh>
+          ))}
+        </group>
       ))}
 
       {/* ===== Bệ bia trên lưng rùa ===== */}
-      <mesh position={[0, 0.28, 0]} castShadow>
-        <boxGeometry args={[0.42, 0.08, 0.18]} />
+      <mesh position={[0, 0.32, 0]} castShadow>
+        <boxGeometry args={[0.44, 0.1, 0.2]} />
         <meshStandardMaterial color="#8d8064" roughness={0.9} />
       </mesh>
 
       {/* ===== Thân bia ===== */}
-      <mesh position={[0, 0.72, 0]} castShadow>
-        <boxGeometry args={[0.36, 0.82, 0.07]} />
-        <meshStandardMaterial color={color} roughness={0.9} />
+      <mesh position={[0, 0.78, 0]} castShadow>
+        <boxGeometry args={[0.38, 0.86, 0.08]} />
+        <meshStandardMaterial color={stone} roughness={0.9} />
       </mesh>
       {/* khung viền chạm quanh thân bia */}
-      <mesh position={[0, 0.72, 0.037]}>
-        <boxGeometry args={[0.3, 0.74, 0.005]} />
-        <meshStandardMaterial color="#7d7158" roughness={0.85} />
+      <mesh position={[0, 0.78, 0.041]}>
+        <boxGeometry args={[0.33, 0.78, 0.006]} />
+        <meshStandardMaterial color="#8a7d62" roughness={0.85} />
       </mesh>
+      {/* chữ khắc trên mặt bia (lưới ô chìm) */}
+      <group position={[0, 0.78, 0.046]}>
+        <CarvedText w={0.27} h={0.68} cols={4} rows={9} color="#6a5e46" z={0} />
+      </group>
 
-      {/* ===== Trán bia bo cong (bán nguyệt) chạm hoa văn ===== */}
-      <mesh position={[0, 1.15, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.18, 0.18, 0.07, 20, 1, false, 0, Math.PI]} />
-        <meshStandardMaterial color={color} roughness={0.9} />
+      {/* ===== Trán bia bo cong (bán nguyệt) ===== */}
+      <mesh position={[0, 1.21, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.19, 0.19, 0.08, 24, 1, false, 0, Math.PI]} />
+        <meshStandardMaterial color={stone} roughness={0.9} />
       </mesh>
-      {/* hoa văn lưỡng long cách điệu trên trán bia */}
-      <mesh position={[0, 1.16, 0.04]}>
-        <torusGeometry args={[0.1, 0.018, 8, 20, Math.PI]} />
-        <meshStandardMaterial color="#7d7158" roughness={0.85} />
+      {/* hoa văn lưỡng long chầu cách điệu trên trán bia */}
+      <mesh position={[0, 1.22, 0.045]}>
+        <torusGeometry args={[0.11, 0.02, 8, 24, Math.PI]} />
+        <meshStandardMaterial color="#8a7d62" roughness={0.85} />
+      </mesh>
+      <mesh position={[0, 1.22, 0.045]}>
+        <torusGeometry args={[0.06, 0.014, 8, 20, Math.PI]} />
+        <meshStandardMaterial color="#8a7d62" roughness={0.85} />
+      </mesh>
+      {/* mặt nguyệt giữa trán */}
+      <mesh position={[0, 1.26, 0.05]}>
+        <cylinderGeometry args={[0.03, 0.03, 0.01, 12]} />
+        <meshStandardMaterial color="#8a7d62" roughness={0.8} />
       </mesh>
     </group>
   );
 }
 
-/** Hàng bia Tiến sĩ — mỗi bia dùng model thật (bia-tien-si.glb) nếu có. */
-function SteleRow({ z, color }: { z: number; color: string }) {
+/** Hàng bia Tiến sĩ dưới nhà bia có mái che (đặc trưng Văn Miếu). */
+function SteleRow({ z, color, roofed = true }: { z: number; color: string; roofed?: boolean }) {
   const items = [-2.6, -1.6, -0.6, 0.6, 1.6, 2.6];
+  const span = 6.0;
   return (
     <group position={[0, 0, z]}>
       {items.map((x, i) => (
@@ -391,6 +612,49 @@ function SteleRow({ z, color }: { z: number; color: string }) {
           />
         </group>
       ))}
+
+      {/* ===== Nhà bia: 4 cột + mái dốc dài ===== */}
+      {roofed && (
+        <group>
+          {/* cột đỡ */}
+          {[-2.7, -0.9, 0.9, 2.7].map((cx, i) =>
+            [0.55, -0.55].map((cz, j) => (
+              <mesh key={`${i}-${j}`} position={[cx, 0.95, cz]} castShadow>
+                <cylinderGeometry args={[0.06, 0.07, 1.9, 10]} />
+                <meshStandardMaterial color="#7a1d14" roughness={0.65} />
+              </mesh>
+            ))
+          )}
+          {/* xà dọc */}
+          {[0.55, -0.55].map((bz, i) => (
+            <mesh key={i} position={[0, 1.95, bz]} castShadow>
+              <boxGeometry args={[span, 0.1, 0.1]} />
+              <meshStandardMaterial color="#7a1d14" roughness={0.65} />
+            </mesh>
+          ))}
+          {/* mái dốc 2 phía (2 tấm nghiêng) */}
+          {[1, -1].map((dir, i) => (
+            <mesh
+              key={i}
+              position={[0, 2.18, dir * 0.42]}
+              rotation={[dir * 0.62, 0, 0]}
+              castShadow
+              receiveShadow
+            >
+              <boxGeometry args={[span + 0.4, 0.08, 0.95]} />
+              <meshStandardMaterial color="#7a2a1e" roughness={0.85} />
+            </mesh>
+          ))}
+          {/* bờ nóc */}
+          <mesh position={[0, 2.42, 0]} castShadow>
+            <boxGeometry args={[span + 0.5, 0.1, 0.12]} />
+            <meshStandardMaterial color="#5e1f14" roughness={0.8} />
+          </mesh>
+          {/* ngói dọc 2 diềm mái */}
+          <TileRow length={span + 0.3} radius={0.045} gap={0.14} color="#6e2418" y={1.96} z={0.88} />
+          <TileRow length={span + 0.3} radius={0.045} gap={0.14} color="#6e2418" y={1.96} z={-0.88} />
+        </group>
+      )}
     </group>
   );
 }

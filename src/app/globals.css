@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --font-serif / --font-sans được next/font inject qua class trên <html>.
+   Fallback nếu font Google chưa tải xong. */
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Times New Roman", "Tinos", Georgia, serif;
+  --font-sans-fallback: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif-fallback: "Times New Roman", "Tinos", Georgia, serif;
 }
 
 html,
@@ -13,7 +15,9 @@ body {
   padding: 0;
   background: #0e0b08;
   color: #f4ecdd;
+  font-family: var(--font-sans), var(--font-sans-fallback);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overscroll-behavior: none;
 }
 
@@ -21,45 +25,191 @@ body {
   box-sizing: border-box;
 }
 
-/* Hoa văn giấy dó mờ làm nền */
+/* ============ Typography helpers ============ */
+.font-serif {
+  font-family: var(--font-serif), var(--font-serif-fallback);
+}
+.font-sans {
+  font-family: var(--font-sans), var(--font-sans-fallback);
+}
+/* Tiêu đề lớn: cân chữ đẹp hơn */
+.text-balance {
+  text-wrap: balance;
+}
+/* Chữ gradient son → vàng */
+.text-gradient-heritage {
+  background: linear-gradient(120deg, #f4ecdd 0%, #e8c79a 45%, #d4a24e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============ Bề mặt (glass / paper) ============ */
 .paper-grain {
   background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 4px 4px;
 }
+/* Panel kính mờ tông di sản — dùng chung cho mọi panel nổi */
+.glass {
+  background: rgba(20, 14, 10, 0.55);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(244, 236, 221, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.glass-strong {
+  background: rgba(20, 14, 10, 0.78);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
+  border: 1px solid rgba(212, 162, 78, 0.22);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+}
+/* Đường viền vàng phát sáng nhẹ */
+.ring-heritage {
+  box-shadow: 0 0 0 1px rgba(212, 162, 78, 0.4), 0 0 24px rgba(212, 162, 78, 0.15);
+}
 
-/* Thanh trượt thời gian */
+/* ============ Thanh trượt thời gian ============ */
 input[type="range"].time-range {
   -webkit-appearance: none;
   appearance: none;
-  height: 4px;
+  height: 6px;
   border-radius: 9999px;
   background: linear-gradient(90deg, #1f2d4d, #5fa8e8, #e8702a, #9c7b3f);
   outline: none;
+  cursor: pointer;
 }
 input[type="range"].time-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 9999px;
-  background: #f4ecdd;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #f4ecdd 60%);
   border: 3px solid #b0301e;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(176, 48, 30, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="range"].time-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(176, 48, 30, 0.25);
 }
 input[type="range"].time-range::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 9999px;
   background: #f4ecdd;
   border: 3px solid #b0301e;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+/* ============ Tiện ích ============ */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ============ Animations ============ */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in-scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-float-up {
+  animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger: gắn style="animation-delay" hoặc dùng các class dưới */
+.delay-1 {
+  animation-delay: 0.08s;
+}
+.delay-2 {
+  animation-delay: 0.16s;
+}
+.delay-3 {
+  animation-delay: 0.24s;
+}
+.delay-4 {
+  animation-delay: 0.32s;
+}
+.delay-5 {
+  animation-delay: 0.4s;
+}
+
+/* Hiệu ứng shimmer cho skeleton/loading */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(244, 236, 221, 0.04) 25%,
+    rgba(244, 236, 221, 0.12) 50%,
+    rgba(244, 236, 221, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
