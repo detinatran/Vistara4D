@@ -13,6 +13,18 @@ export interface DemoItem {
 
 export const DEMOS: DemoItem[] = [
   {
+    title: "Shape of Motion — horse jump tracking",
+    source: "Shape of Motion",
+    mode: "video",
+    media: "https://shape-of-motion.github.io/static/videos/horsejump-high.mp4",
+    link: "https://shape-of-motion.github.io/",
+    point: "Motion 4D",
+    desc: {
+      vi: "Tái dựng chuyển động 4D của đối tượng động (ngựa nhảy) từ video đơn — minh họa lớp chuyển động sống động cho không gian di sản.",
+      en: "4D motion reconstruction of a dynamic subject (jumping horse) from a single video — illustrating a living motion layer for heritage spaces.",
+    },
+  },
+  {
     title: "Google D4RT — scene capability",
     source: "Google D4RT",
     mode: "gif",

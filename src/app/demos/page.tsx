@@ -66,9 +66,9 @@ export default function DemosPage() {
             </div>
             <div className="grid grid-cols-2 gap-2.5">
               <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                <div className="font-serif text-2xl font-bold text-vang">10</div>
+                <div className="font-serif text-2xl font-bold text-vang">{DEMOS.length}</div>
                 <div className="mt-1 text-[11px] leading-tight text-giay/70">
-                  {lang === "vi" ? "hình động về cảnh & không gian" : "scene & space clips"}
+                  {lang === "vi" ? "hình động về cảnh & chuyển động" : "scene & motion clips"}
                 </div>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
