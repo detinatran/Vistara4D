@@ -4,7 +4,7 @@
 
 :root {
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Georgia", "Times New Roman", serif;
+  --font-serif: "Times New Roman", "Tinos", Georgia, serif;
 }
 
 html,

@@ -181,7 +181,7 @@ export default function ExperiencePage() {
               <button
                 key={l.id}
                 onClick={() => setPos(i)}
-                className={`flex-1 px-1 text-center text-[10px] leading-tight transition ${
+                className={`flex-1 px-1 text-center font-serif text-[11px] leading-tight transition ${
                   Math.round(pos) === i ? "font-bold text-giay" : "text-giay/45 hover:text-giay/70"
                 }`}
               >
