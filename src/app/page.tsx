@@ -63,14 +63,22 @@ export default function LandingPage() {
 
         {/* CTA chính */}
         <div className="animate-float-up delay-4 flex w-full max-w-xs flex-col gap-3">
-          <Link
-            href="/experience"
-            className="group relative overflow-hidden rounded-2xl bg-son py-4 text-center text-base font-bold text-giay shadow-lg shadow-son/40 ring-1 ring-inset ring-white/10 transition-all hover:-translate-y-0.5 hover:bg-son-light hover:shadow-xl hover:shadow-son/50 active:translate-y-0 active:scale-[0.98]"
-          >
-            {/* shimmer chạy qua nút */}
-            <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-            <span className="relative">▶ {t.enterDemo}</span>
-          </Link>
+          <div className="grid grid-cols-[1.4fr_1fr] gap-3">
+            <Link
+              href="/experience"
+              className="group relative overflow-hidden rounded-2xl bg-son py-4 text-center text-base font-bold text-giay shadow-lg shadow-son/40 ring-1 ring-inset ring-white/10 transition-all hover:-translate-y-0.5 hover:bg-son-light hover:shadow-xl hover:shadow-son/50 active:translate-y-0 active:scale-[0.98]"
+            >
+              {/* shimmer chạy qua nút */}
+              <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="relative">▶ {t.enterDemo}</span>
+            </Link>
+            <Link
+              href="/demos"
+              className="flex items-center justify-center rounded-2xl border border-vang/40 bg-vang/10 px-2 text-center text-sm font-bold leading-tight text-vang backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-vang/20 active:translate-y-0 active:scale-[0.98]"
+            >
+              ▦ {t.demoOptions}
+            </Link>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setQr(true)}

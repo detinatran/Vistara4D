@@ -190,6 +190,12 @@ export interface UIStrings {
   heroTitle: string;
   heroSub: string;
   enterDemo: string;
+  demoOptions: string;
+  demosTitle: string;
+  demosSub: string;
+  demosNoteTitle: string;
+  demosNote: string;
+  openSource: string;
   scanQR: string;
   subscribe: string;
   share: string;
@@ -237,6 +243,14 @@ export const UI: Record<Lang, UIStrings> = {
     heroTitle: "Vietnam Heritage in Motion",
     heroSub: "Văn Miếu không chỉ để nhìn — mà để trải nghiệm qua không gian, chuyển động và thời gian.",
     enterDemo: "Vào trải nghiệm 4D",
+    demoOptions: "Demo Options",
+    demosTitle: "Scene-based 4D demos",
+    demosSub:
+      "10 hình động thiên về cảnh quan, không gian và camera di chuyển — minh họa hướng công nghệ 4D Gaussian khả thi cho khu du lịch, bảo tàng và di tích.",
+    demosNoteTitle: "Cách dùng khi pitch",
+    demosNote:
+      "Đây là demo nghiên cứu công khai từ Google DeepMind và các nhóm 4DGS, dùng để chứng minh hướng công nghệ khả thi. Vistara4D sẽ pilot dữ liệu thật tại di tích sau — không trình bày đây là sản phẩm đã tự scan của nhóm.",
+    openSource: "Mở nguồn",
     scanQR: "Quét QR tại di tích",
     subscribe: "Nhận thông tin",
     share: "Chia sẻ",
@@ -282,6 +296,14 @@ export const UI: Record<Lang, UIStrings> = {
     heroTitle: "Vietnam Heritage in Motion",
     heroSub: "The Temple of Literature is not just to look at — but to experience through space, motion and time.",
     enterDemo: "Enter the 4D experience",
+    demoOptions: "Demo Options",
+    demosTitle: "Scene-based 4D demos",
+    demosSub:
+      "10 short clips focused on landscape, space and moving cameras — showing the feasible 4D Gaussian direction for tourism sites, museums and monuments.",
+    demosNoteTitle: "How to use when pitching",
+    demosNote:
+      "These are public research demos from Google DeepMind and 4DGS teams, used to prove the technology direction is feasible. Vistara4D will pilot real data on-site later — do not present these as the team's own scans.",
+    openSource: "Open source",
     scanQR: "Scan QR on-site",
     subscribe: "Get updates",
     share: "Share",
